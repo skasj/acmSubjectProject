@@ -1,8 +1,11 @@
 package leetCode.exam;
 
+
 import java.util.*;
-import java.util.concurrent.DelayQueue;
 import java.util.function.IntPredicate;
+import java.util.function.Predicate;
+
+import static org.junit.Assert.assertTrue;
 
 public class ArraySolution {
     public int getWinner(int[] arr, int k) {
@@ -609,10 +612,116 @@ public class ArraySolution {
     }
 
     /**
-     * @param args
+     * 煎饼排序
+     * 思路：参照快速排序
+     * 1. 右侧递减，且必须大于第一个值
+     * 2. 从右侧第一个小于第一个值进行翻转
+     * 3. 直到数组递增
+     * @param arr
+     * @return
      */
+    public List<Integer> pancakeSort(int[] arr) {
+        ArrayList<Integer> result = new ArrayList<>();
+        int temp=0;
+        while (true){
+            int i= arr.length-1;
+            for (;i>-1;i--){
+                if (arr[i]<arr[0]||(i!=arr.length-1&&arr[i+1]<arr[i])){
+                    result.add(i+1);
+                    for (int j=0;j<(i+1)/2;j++){
+                        temp = arr[j];
+                        arr[j]=arr[i-j];
+                        arr[i-j]=temp;
+                    }
+                    break;
+                }
+            }
+            if (i==-1){
+                break;
+            }
+        }
+        return result;
+    }
+    /**
+     * 209. 长度最小的子数组
+     * 思路：滑动窗口法，
+     * 1. 右标记使最大值大于s
+     * 2. 左标记使最大值小于s，求出子数组最小长度
+     * @param s
+     * @param nums
+     */
+    public int minSubArrayLen(int s, int[] nums) {
+        int left=0;int right=0;
+        int count=0;int result=Integer.MAX_VALUE;
+        boolean flag = false;
+        while (right<nums.length){
+            count+=nums[right];
+            while (count>=s && left<=right){
+                flag=true;
+                result=Math.min(right-left+1,result);
+                count-=nums[left];
+                left++;
+            }
+            right++;
+        }
+        return flag?result:0;
+    }
+
+
+    /**
+     * 1424. 对角线遍历 II
+     * 先把结构转换为HashMap结构，key=x+y
+     * 然后遍历输出到数组
+     * @param nums
+     * @return
+     */
+    public int[] findDiagonalOrder(List<List<Integer>> nums) {
+        int maxkey=Integer.MIN_VALUE;
+        int count=0;
+        ArrayList<Integer> orDefault;
+        HashMap<Integer, ArrayList<Integer>> integerArrayListHashMap = new HashMap<>();
+        for (int x=0;x<nums.size();x++){
+            count+=nums.get(x).size();
+            maxkey=Math.max(maxkey,x+nums.get(x).size()-1);
+            for (int y =0;y<nums.get(x).size();y++){
+                orDefault = integerArrayListHashMap
+                        .getOrDefault(x + y, new ArrayList<>());
+                orDefault.add(nums.get(x).get(y));
+                integerArrayListHashMap.put(x+y,orDefault);
+            }
+        }
+        int[] result = new int[count];
+        int index=0;
+        int key=0;
+        while (maxkey>-1){
+            ArrayList<Integer> integers = integerArrayListHashMap.get(key++);
+            if (null!=integers && !integers.isEmpty()){
+                for (int i =integers.size()-1;i>-1;i--){
+                    result[index++] = integers.get(i);
+                }
+            }
+            maxkey--;
+        }
+        return result;
+    }
+
+
+    public void testNullValueOfArrayList(){
+        ArrayList<Integer> ints = new ArrayList<>();
+        for (int i = 0;i<1;i++){
+            ints.add(i);
+        }
+        ints.set(0,null);
+        boolean b = ints.stream().filter(Objects::nonNull).anyMatch(this::println);
+        System.out.println(b);
+    }
+    private Boolean println(Integer integer){
+        System.out.println(integer);
+        return integer.equals(10);
+    }
+
     public static void main(String[] args) {
         ArraySolution solution = new ArraySolution();
-        System.out.println(solution.canReorderDoubled(new int[]{2,1,2,6}));
+        solution.testNullValueOfArrayList();
     }
 }
