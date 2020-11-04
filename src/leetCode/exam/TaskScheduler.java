@@ -8,52 +8,26 @@ import java.util.Comparator;
 public class TaskScheduler {
 
     public int leastInterval(char[] tasks, int n) {
-        int[] initInt = new int[26];
-        for (char task:tasks){
-            initInt[(int) task - 65]++;
-        }
+        int allNum = tasks.length;
         Integer[] counts = new Integer[26];
-        for (int i =0;i<initInt.length;i++) {
-            counts[i]= initInt[i];
+        Arrays.fill(counts, 0);
+        for (char task : tasks) {
+            counts[(int) task - 65]++;
         }
-        int minC=Integer.MAX_VALUE;
-        int survivor;
-        int lastAdd=0;
+        int temp =0;
         int result = 0;
-        while (true){
-            survivor = 0;
+        long count ;
+        while (allNum != 0){
+            temp=n+1;
+            count = Arrays.stream(counts).filter(o -> o>0).count();
             Arrays.sort(counts, Comparator.reverseOrder());
-            for (Integer count : counts) {
-                if (count > 0) {
-                    minC = count;
-                    survivor++;
-                }
+            for (int i =0;i<count && temp >0;i++,temp--) {
+                counts[i]--;
+                allNum --;
             }
-            if (survivor ==0){
-                break;
-            }
-            if (n+1>survivor){
-                for (int i = 0;i<counts.length;i++){
-                    if (counts[i]>0){
-                        counts[i] -= minC;
-                    }
-                }
-                lastAdd = n+1-survivor;
-            } else {
-                survivor = n+1;
-                for (int i=0;i<counts.length;i++){
-                    if (counts[i]>0){
-                        counts[i] -= minC;
-                        survivor--;
-                        if (survivor==0){
-                            break;
-                        }
-                    }
-                }
-            }
-            result += minC * (n+1);
+            result += n+1;
         }
-        return result - lastAdd;
+        return result - temp;
     }
 
     public static void main(String[] args) {
