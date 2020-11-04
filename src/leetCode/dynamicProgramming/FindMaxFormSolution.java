@@ -1,6 +1,5 @@
 package leetCode.dynamicProgramming;
 
-import java.util.Arrays;
 
 public class FindMaxFormSolution {
 
@@ -26,18 +25,35 @@ public class FindMaxFormSolution {
         return result;
     }
 
+    /**
+     * 由贪心法则演进过来，而不是动态规划，这样比较好理解一点
+     * @param nums
+     * @return
+     */
     public int lengthOfLIS(int[] nums) {
-        if (null==nums||0==nums.length){
+        if (nums == null || nums.length==0){
             return 0;
         }
-        int[] dp = new int[nums.length];
-        for (int index =0;index<nums.length;index++){
-            for (int pre = 0;pre< index;pre++){
-                if (nums[index]>nums[pre]){
-                    dp[index]=Math.max(1+dp[pre],dp[index]);
+        int[] tail = new int[nums.length];
+        int res = 1;
+        tail[0]=nums[0];
+        for (int i=1;i<nums.length;i++){
+            if (nums[i]>tail[res-1]){
+                tail[res]=nums[i];
+                res++;
+            } else {
+                int pre = Integer.MIN_VALUE;
+                // 这里可以用二分法优化
+                for (int j=0;j<res;j++){
+                    if (nums[i]>pre&&nums[i]<tail[j]){
+                        tail[j]=nums[i];
+                        break;
+                    } else {
+                        pre=tail[j];
+                    }
                 }
             }
         }
-        return Arrays.stream(dp).max().getAsInt() +1;
+        return res;
     }
 }
