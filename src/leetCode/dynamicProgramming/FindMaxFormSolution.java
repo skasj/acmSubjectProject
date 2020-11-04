@@ -1,5 +1,7 @@
 package leetCode.dynamicProgramming;
 
+import java.util.Arrays;
+
 public class FindMaxFormSolution {
 
     public int findMaxForm(String[] strs, int m, int n) {
@@ -22,5 +24,20 @@ public class FindMaxFormSolution {
             result[c-'0']++;
         }
         return result;
+    }
+
+    public int lengthOfLIS(int[] nums) {
+        if (null==nums||0==nums.length){
+            return 0;
+        }
+        int[] dp = new int[nums.length];
+        for (int index =0;index<nums.length;index++){
+            for (int pre = 0;pre< index;pre++){
+                if (nums[index]>nums[pre]){
+                    dp[index]=Math.max(1+dp[pre],dp[index]);
+                }
+            }
+        }
+        return Arrays.stream(dp).max().getAsInt() +1;
     }
 }
