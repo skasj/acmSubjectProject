@@ -56,4 +56,26 @@ public class FindMaxFormSolution {
         }
         return res;
     }
+
+    public int maxTurbulenceSize(int[] A) {
+        if (A.length==1){
+            return 1;
+        }
+        int preSide = 0;
+        int length = 1;
+        int res = length;
+        for (int i = 1;i<A.length;i++){
+            int nowSide = Integer.compare(A[i-1],A[i]);
+            if (preSide * nowSide == -1){
+                length++;
+            } else if (nowSide != 0){
+                length = 2;
+            } else {
+                length = 1;
+            }
+            res=Math.max(res,length);
+            preSide = nowSide;
+        }
+        return res;
+    }
 }
