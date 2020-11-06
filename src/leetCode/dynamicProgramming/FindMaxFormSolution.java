@@ -78,4 +78,49 @@ public class FindMaxFormSolution {
         }
         return res;
     }
+
+    /**
+     * 统计不同回文子序列
+     * bp[c][i][j]
+     * i 代表原有序列的左节点
+     * j 代表原有序列的右节点
+     * @param S
+     * @return
+     */
+    public int countPalindromicSubsequences(String S) {
+        char[] chars = S.toCharArray();
+        int n = chars.length;
+        int mod = 1000000007;
+        int[][][] bp =new int[4][n][n];
+        for (int j=0;j< n;++j){
+            for (int i=j;i>=0; i--) {
+                for (int k=0;k<4;k++){
+                    int c = 'a' + k;
+                    if ( i == j){
+                        bp[k][i][j] = chars[i] == c ? 1 : 0;
+                    } else {
+                        if (c != chars[i]){
+                            bp[k][i][j] = bp[k][i+1][j];
+                        } else if (c!=chars[j]) {
+                            bp[k][i][j] = bp[k][i][j-1];
+                        } else {
+                            bp[k][i][j] = 2;
+                            if (j != i+1){
+                                for (int m=0;m<4;m++){
+                                    bp[k][i][j] += bp[m][i+1][j-1];
+                                    bp[k][i][j] %= mod;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        int res = 0;
+        for (int m=0;m<4;m++){
+            res += bp[m][0][n-1];
+            res %= mod;
+        }
+        return res;
+    }
 }

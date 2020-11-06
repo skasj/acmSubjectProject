@@ -44,4 +44,13 @@ public class FindMaxFormSolutionTest {
         Assert.assertEquals(solution.maxTurbulenceSize(new int[]{100}),1);
         Assert.assertEquals(solution.maxTurbulenceSize(new int[]{9,9}),1);
     }
+
+    @Test
+    public void countPalindromicSubsequences(){
+        FindMaxFormSolution solution = new FindMaxFormSolution();
+        Assert.assertEquals(6,solution.countPalindromicSubsequences("bccb"));
+        Assert.assertEquals(744991227,solution.countPalindromicSubsequences("bddaabdbbccdcdcbbdbddccbaaccabbcacbadbdadbccddccdbdbdbdabdbddcccadddaaddbcbcbabdcaccaacabdbdaccbaacc"));
+        Assert.assertEquals(104860361,solution.countPalindromicSubsequences(
+                "abcdabcdabcdabcdabcdabcdabcdabcddcbadcbadcbadcbadcbadcbadcbadcba"));
+    }
 }
