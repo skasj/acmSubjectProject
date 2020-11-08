@@ -66,4 +66,13 @@ public class FindMaxFormSolutionTest {
         Assert.assertFalse(solution.isMatch("aaa","aaaa"));
         Assert.assertTrue(solution.isMatch("aaa","a*a"));
     }
+
+    @Test
+    public void maxDotProduct(){
+        FindMaxFormSolution solution = new FindMaxFormSolution();
+        Assert.assertEquals(18,solution.maxDotProduct(new int[]{2,1,-2,5},new int[]{3,0,-6}));
+        Assert.assertEquals(21,solution.maxDotProduct(new int[]{3,-2},new int[]{2,-6,7}));
+        Assert.assertEquals(-1,solution.maxDotProduct(new int[]{-1,-1},new int[]{1,1}));
+
+    }
 }

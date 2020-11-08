@@ -1,6 +1,9 @@
 package leetCode.dynamicProgramming;
 
 
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
 public class FindMaxFormSolution {
 
     public int findMaxForm(String[] strs, int m, int n) {
@@ -156,5 +159,33 @@ public class FindMaxFormSolution {
             return true;
         }
         return p.charAt(j - 1) == s.charAt(i-1);
+    }
+
+    /*
+     1458. 两个子序列的最大点积
+     1. 数组长度不同
+     2. 两个子序列长度相同，子序列元素顺序不能改变
+     3. dp[i][j]代表nums1[0,i]与nums[0,j]的最大点积
+     4. dp[i][j]=
+          有4种情况：
+          a.不包含i dp[i-1][j]
+          b.不包含j dp[i][j-1]
+          c.只包含i和j nums1[i]*  nums2[j]
+          d.包含i和j dp[i-1][j-1]+ nums1[i]*  nums2[j]
+     */
+    public int maxDotProduct(int[] nums1, int[] nums2) {
+        int[][] dp = new int[nums1.length][nums2.length];
+        dp[0][0] = nums1[0]*nums2[0];
+        IntStream.range(1,nums2.length).forEach(i-> dp[0][i] = Math.max(dp[0][i-1], nums2[i]*nums1[0]));
+        IntStream.range(1,nums1.length).forEach(i-> dp[i][0] = Math.max(dp[i-1][0], nums2[0]*nums1[i]));
+        for (int i = 1;i<nums1.length;++i){
+            for (int j=1;j<nums2.length;++j){
+                int mul =nums1[i]*  nums2[j];
+                dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]);
+                dp[i][j] = Math.max(dp[i-1][j-1] + mul,dp[i][j]);
+                dp[i][j] = Math.max(mul,dp[i][j]);
+            }
+        }
+        return dp[nums1.length-1][nums2.length-1];
     }
 }
