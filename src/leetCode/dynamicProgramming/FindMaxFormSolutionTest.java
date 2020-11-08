@@ -53,4 +53,17 @@ public class FindMaxFormSolutionTest {
         Assert.assertEquals(104860361,solution.countPalindromicSubsequences(
                 "abcdabcdabcdabcdabcdabcdabcdabcddcbadcbadcbadcbadcbadcbadcbadcba"));
     }
+
+    @Test
+    public void isMatch(){
+        FindMaxFormSolution solution = new FindMaxFormSolution();
+        Assert.assertFalse(solution.isMatch("aa","a"));
+        Assert.assertTrue(solution.isMatch("aa","a*"));
+        Assert.assertTrue(solution.isMatch("ab",".*"));
+        Assert.assertTrue(solution.isMatch("aab","c*a*b"));
+        Assert.assertFalse(solution.isMatch("mississippi" ,"mis*is*p*."));
+        Assert.assertFalse(solution.isMatch("ab",".*c"));
+        Assert.assertFalse(solution.isMatch("aaa","aaaa"));
+        Assert.assertTrue(solution.isMatch("aaa","a*a"));
+    }
 }
