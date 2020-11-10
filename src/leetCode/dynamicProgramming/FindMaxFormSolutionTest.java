@@ -73,6 +73,17 @@ public class FindMaxFormSolutionTest {
         Assert.assertEquals(18,solution.maxDotProduct(new int[]{2,1,-2,5},new int[]{3,0,-6}));
         Assert.assertEquals(21,solution.maxDotProduct(new int[]{3,-2},new int[]{2,-6,7}));
         Assert.assertEquals(-1,solution.maxDotProduct(new int[]{-1,-1},new int[]{1,1}));
-
     }
+
+    @Test
+    public void distinctSubseqII(){
+        FindMaxFormSolution solution = new FindMaxFormSolution();
+        Assert.assertEquals(7,solution.distinctSubseqII("abc"));
+        Assert.assertEquals(6,solution.distinctSubseqII("aba"));
+        Assert.assertEquals(3,solution.distinctSubseqII("aaa"));
+        Assert.assertEquals(11,solution.distinctSubseqII("aabc"));
+        Assert.assertEquals(29,solution.distinctSubseqII("abdae"));
+        Assert.assertEquals(35,solution.distinctSubseqII("bcbbca"));
+    }
+
 }

@@ -132,18 +132,18 @@ public class FindMaxFormSolution {
     public boolean isMatch(String s, String p) {
         int m = s.length();
         int n = p.length();
-        boolean[][] bp = new boolean[m+1][n+1];
-        bp[0][0]=true;
-        for (int i=0;i<m+1;i++){
-            for (int j=1;j<n+1;j++){
-                if (p.charAt(j-1) == '*'){
-                    bp[i][j] = bp[i][j-2];
-                    if (match(s,p,i,j-1)){
-                        bp[i][j] = bp[i][j] || bp[i-1][j];
+        boolean[][] bp = new boolean[m + 1][n + 1];
+        bp[0][0] = true;
+        for (int i = 0; i < m + 1; i++) {
+            for (int j = 1; j < n + 1; j++) {
+                if (p.charAt(j - 1) == '*') {
+                    bp[i][j] = bp[i][j - 2];
+                    if (match(s, p, i, j - 1)) {
+                        bp[i][j] = bp[i][j] || bp[i - 1][j];
                     }
                 } else {
-                    if (match(s,p,i,j)){
-                        bp[i][j] = bp[i-1][j-1];
+                    if (match(s, p, i, j)) {
+                        bp[i][j] = bp[i - 1][j - 1];
                     }
                 }
             }
@@ -152,13 +152,13 @@ public class FindMaxFormSolution {
     }
 
     private boolean match(String s, String p, int i, int j) {
-        if (i==0){
+        if (i == 0) {
             return false;
         }
-        if (p.charAt(j-1)=='.'){
+        if (p.charAt(j - 1) == '.') {
             return true;
         }
-        return p.charAt(j - 1) == s.charAt(i-1);
+        return p.charAt(j - 1) == s.charAt(i - 1);
     }
 
     /*
@@ -175,17 +175,50 @@ public class FindMaxFormSolution {
      */
     public int maxDotProduct(int[] nums1, int[] nums2) {
         int[][] dp = new int[nums1.length][nums2.length];
-        dp[0][0] = nums1[0]*nums2[0];
-        IntStream.range(1,nums2.length).forEach(i-> dp[0][i] = Math.max(dp[0][i-1], nums2[i]*nums1[0]));
-        IntStream.range(1,nums1.length).forEach(i-> dp[i][0] = Math.max(dp[i-1][0], nums2[0]*nums1[i]));
-        for (int i = 1;i<nums1.length;++i){
-            for (int j=1;j<nums2.length;++j){
-                int mul =nums1[i]*  nums2[j];
-                dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]);
-                dp[i][j] = Math.max(dp[i-1][j-1] + mul,dp[i][j]);
-                dp[i][j] = Math.max(mul,dp[i][j]);
+        dp[0][0] = nums1[0] * nums2[0];
+        IntStream.range(1, nums2.length).forEach(i -> dp[0][i] = Math.max(dp[0][i - 1], nums2[i] * nums1[0]));
+        IntStream.range(1, nums1.length).forEach(i -> dp[i][0] = Math.max(dp[i - 1][0], nums2[0] * nums1[i]));
+        for (int i = 1; i < nums1.length; ++i) {
+            for (int j = 1; j < nums2.length; ++j) {
+                int mul = nums1[i] * nums2[j];
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                dp[i][j] = Math.max(dp[i - 1][j - 1] + mul, dp[i][j]);
+                dp[i][j] = Math.max(mul, dp[i][j]);
             }
         }
-        return dp[nums1.length-1][nums2.length-1];
+        return dp[nums1.length - 1][nums2.length - 1];
+    }
+
+
+    /**
+     * 1. dp[i] 代表字符串[0,i]的不同非空子序列的个数
+     *
+     */
+    public int distinctSubseqII(String S) {
+        //    a a =1 = dp[0]
+        //    aa a aa = dp[0] + 1 = 2 = dp[1]
+        //    aab a aa ab aab b = 2*dp[1] + dp[0] = 5 =dp[2]
+        //    aabb a aa ab aab b abb aabb bb = 2*dp[2]-dp[1] = dp[3] 重复
+        //    aaba a aa ab aab b aa aaa aba aaba ba = 2 * dp[2] = 10 不重复,已出现过
+        //    aabc a aa ab aab b ac aac abc aabc bc c = 2 * dp[2] + 1 =11 未出现过
+        if (S.length() == 1) {
+            return 1;
+        }
+        int MOD = 1000000007;
+        int[] dp = new int[S.length() + 1];
+        int[] lastIndex = new int[26];
+        dp[0] = 1;
+        Arrays.fill(lastIndex,-1);
+        for (int i = 0; i < S.length(); i++) {
+            dp[i+1]=2*dp[i]%MOD;
+            if (lastIndex[S.charAt(i) - 'a']>=0){
+                dp[i+1] -= dp[lastIndex[S.charAt(i) - 'a']];
+            }
+            dp[i+1]%=MOD;
+            lastIndex[S.charAt(i) - 'a'] =i;
+        }
+        int i = --dp[S.length()];
+        i= i<0 ? i+MOD:i;
+        return i;
     }
 }
